@@ -4,7 +4,11 @@ namespace Persistence
 {
     public class Seed
     {
-
+        /// <summary>
+        /// Trying to seed the database... 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public static async Task SeedData(DataContext context)
         {
             //var SCBData = System.IO.File.ReadAllText(@"BefolkningNy.json");
