@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
+import { Header, List } from 'semantic-ui-react';
 
 function App() {
   const [statistics, setStatics] = useState([]);
@@ -14,13 +15,18 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <ul>
-          {statistics.map((statistics: any) => (
-            <li key={statistics.id}>Statestik:{statistics.county}</li>
-          ))}
-        </ul>
-      </header>
+      <Header
+        as="h1"
+        icon="tag"
+        content="SCBs Kod test försök av Kent Jakobsson"
+      />
+      <List>
+        {statistics.map((statistics: any) => (
+          <List.Item key={statistics.id}>
+            Statestik: {statistics.county}
+          </List.Item>
+        ))}
+      </List>
     </div>
   );
 }
