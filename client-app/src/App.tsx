@@ -1,23 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import axios from 'axios';
 
 function App() {
+  const [statistics, setStatics] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:5000/api/scb').then((response) => {
+      console.log(response);
+      setStatics(response.data);
+    });
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <ul>
+          {statistics.map((statistics: any) => (
+            <li key={statistics.id}>Statestik:{statistics.county}</li>
+          ))}
+        </ul>
       </header>
     </div>
   );

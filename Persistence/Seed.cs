@@ -1,3 +1,5 @@
+using System.Runtime.Serialization.Json;
+using System.Text.Json;
 using Domain;
 
 namespace Persistence
@@ -11,26 +13,30 @@ namespace Persistence
         /// <returns></returns>
         public static async Task SeedData(DataContext context)
         {
-            //var SCBData = System.IO.File.ReadAllText(@"BefolkningNy.json");
         
-            if(context.SCBs.Any()) return;
+        string sCBData = File.ReadAllText("BefolkningNy.json");
 
-            var statistics = new List<SCB>
-            {
-                new SCB
+        var stat = JsonSerializer.Deserialize<List<SCB>>(sCBData);
+        if(context.SCBs.Any()) return;
+
+
+                var statistics = new List<SCB>
                 {
-                    ManInCounty = 200,
-                    WomanInCounty =250,
-                    BabesTotal = 500,
-                    BirthYearOfBabies = "2010",
-                    County = "Halmstad",
+                    new SCB
+                    {
+                        ManInCounty = 200,
+                        WomanInCounty =250,
+                        BabesTotal = 500,
+                        BirthYearOfBabies = "2010",
+                        County = "Halmstad",
 
-                }
+                    }
 
-            };
-            await context.SCBs.AddRangeAsync(statistics);
-            await context.SaveChangesAsync();
+                };
+                await context.SCBs.AddRangeAsync(statistics);
+                await context.SaveChangesAsync();
 
         }
     }
 }
+

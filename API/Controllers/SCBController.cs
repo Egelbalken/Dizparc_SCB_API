@@ -22,7 +22,8 @@ namespace API.Controllers
         public async Task<ActionResult<SCB>> GetSCB(Guid id){
             return await _context.SCBs.FindAsync(id);
         }
-
         
+        
+
     }
 }
