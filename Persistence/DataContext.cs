@@ -12,7 +12,9 @@ namespace Persistence
         {
         }
 
-        public DbSet<SCB> SCBs {get;set;}
+        public DbSet<Variable> variables {get;set;}
+
+        public DbSet<Root> roots { get; set; }
 
     }
 }

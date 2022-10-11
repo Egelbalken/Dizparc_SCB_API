@@ -1,40 +1,63 @@
 using System.Runtime.Serialization.Json;
 using System.Text.Json;
 using Domain;
+using Newtonsoft.Json;
 
 namespace Persistence
 {
     public class Seed
     {
         /// <summary>
-        /// Trying to seed the database... 
+        /// Used https://json2csharp.com/ 
+        /// To find out how to match and create a c# class structure.
+        /// Then convert the "Json" key-value pair. to c# properties.
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
+        /// 
         public static async Task SeedData(DataContext context)
         {
-        
-        string sCBData = File.ReadAllText("BefolkningNy.json");
+            // JsonData object
+            Root data;
 
-        var stat = JsonSerializer.Deserialize<List<SCB>>(sCBData);
-        if(context.SCBs.Any()) return;
+            using (var client = new HttpClient())
+            {
+
+                var endpoint = new Uri("http://api.scb.se/OV0104/v1/doris/en/ssd/BE/BE0101/BE0101A/BefolkningNy");
+
+                var result = client.GetAsync(endpoint).Result;
+
+                var json = await result.Content.ReadAsStringAsync();
+
+                //Console.WriteLine(json);
+
+                data = JsonConvert.DeserializeObject<Root>(json);
+
+            }
 
 
-                var statistics = new List<SCB>
-                {
-                    new SCB
-                    {
-                        ManInCounty = 200,
-                        WomanInCounty =250,
-                        BabesTotal = 500,
-                        BirthYearOfBabies = "2010",
-                        County = "Halmstad",
+            if (context.roots.Any()) return;
 
-                    }
+            Root root = new Root()
+            {
+                title = data.title,
+                variables = new List<Variable>(data.variables),
+            };
 
-                };
-                await context.SCBs.AddRangeAsync(statistics);
-                await context.SaveChangesAsync();
+            await context.roots.AddRangeAsync(root);
+
+            Variable variable = new Variable()
+            {
+                code = "",
+                text = "",
+                values = new List<string>(),
+                valueTexts = new List<string>(),
+                elimination = true,
+                time = true,
+            };
+            await context.variables.AddRangeAsync(variable);
+
+            await context.SaveChangesAsync();
 
         }
     }
