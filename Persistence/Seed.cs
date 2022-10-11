@@ -18,7 +18,8 @@ namespace Persistence
         public static async Task SeedData(DataContext context)
         {
             // JsonData object
-            Root data;
+            Root dataRoot;
+            Variable dataVariable;
 
             using (var client = new HttpClient())
             {
@@ -31,31 +32,38 @@ namespace Persistence
 
                 //Console.WriteLine(json);
 
-                data = JsonConvert.DeserializeObject<Root>(json);
-
+                dataRoot = JsonConvert.DeserializeObject<Root>(json);
+                dataVariable = JsonConvert.DeserializeObject<Variable>(json);
             }
 
 
             if (context.roots.Any()) return;
 
-            Root root = new Root()
+            /* About to add a loop.
+            foreach(var year in dataRoot)
             {
-                title = data.title,
-                variables = new List<Variable>(data.variables),
-            };
 
-            await context.roots.AddRangeAsync(root);
+            }
+            */
 
             Variable variable = new Variable()
             {
-                code = "",
-                text = "",
-                values = new List<string>(),
-                valueTexts = new List<string>(),
-                elimination = true,
-                time = true,
+                code = dataVariable.code,
+                text = dataVariable.text,
+                values = new List<string>(dataVariable.values),
+                valueTexts = new List<string>(dataVariable.valueTexts),
+                elimination = dataVariable.elimination,
+                time = dataVariable.time,
             };
             await context.variables.AddRangeAsync(variable);
+
+            Root root = new Root()
+            {
+                title = dataRoot.title,
+                variables = new List<Variable>(dataRoot.variables),
+            };
+
+            await context.roots.AddRangeAsync(root);
 
             await context.SaveChangesAsync();
 
