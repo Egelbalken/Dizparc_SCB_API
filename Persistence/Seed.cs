@@ -24,14 +24,15 @@ namespace Persistence
 
             using (var client = new HttpClient())
             {
-
+                /*
+                */
                 var endpoint = new Uri("http://api.scb.se/OV0104/v1/doris/en/ssd/BE/BE0101/BE0101A/BefolkningNy");
 
-                var result = client.GetAsync(endpoint).Result;
+                var result = await client.GetAsync(endpoint);
 
                 var json = await result.Content.ReadAsStringAsync();
 
-                // It will throw a exeption here, can not parse whit Domain clases.                
+                // It will throw a exeption here,                 
                 dataRoot = JsonConvert.DeserializeObject<List<Root>>(json);
                 dataVariable = JsonConvert.DeserializeObject<List<Variable>>(json);
             }

@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain
 {
+    [Serializable]
     public class Variable
     {
         public Guid Id { get; set; }
