@@ -42,7 +42,6 @@ namespace Persistence
             /* About to add a loop.
             foreach(var year in dataRoot)
             {
-
             }
             */
 
