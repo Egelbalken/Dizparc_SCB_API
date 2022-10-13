@@ -22,8 +22,5 @@ namespace API.Controllers
         public async Task<ActionResult<Root>> GetRoot(Guid id){
             return await _context.roots.FindAsync(id);
         }
-        
-        
-
     }
 }

@@ -15,15 +15,15 @@ namespace Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             /*
-            */
+            modelBuilder.Entity<Root>()
+                .HasKey(v => v.Id);
+
+            modelBuilder.Entity<Variable>()
+                .HasKey(r => r.Id);
+
             modelBuilder.Entity<Root>()
                 .HasOne(v => v.variables);
-
-            modelBuilder.Entity<Variable>()
-                .HasOne(r => r.valueTexts);
-
-            modelBuilder.Entity<Variable>()
-                .HasOne(r => r.text);
+            */
         }
 
         public DbSet<Variable> variables {get;set;}

@@ -31,8 +31,7 @@ namespace Persistence
 
                 var json = await result.Content.ReadAsStringAsync();
 
-                //Console.WriteLine(json);
-
+                // It will throw a exeption here, can not parse whit Domain clases.                
                 dataRoot = JsonConvert.DeserializeObject<List<Root>>(json);
                 dataVariable = JsonConvert.DeserializeObject<List<Variable>>(json);
             }
@@ -62,6 +61,7 @@ namespace Persistence
                         title = rootItem.title,
                         variables = new List<Variable>(rootItem.variables),
                     };
+
                     await context.variables.AddRangeAsync(variable);
                     await context.roots.AddRangeAsync(root);
                 }

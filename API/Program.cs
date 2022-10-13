@@ -29,7 +29,8 @@ namespace API
                 //await context.Database.MigrateAsync();
                 await Seed.SeedData(context);
 
-           }catch(Exception ex)
+            }
+            catch (Exception ex)
            {
                 // If not success send an error to logger.
                 var logger = services.GetRequiredService<ILogger<Program>>();
