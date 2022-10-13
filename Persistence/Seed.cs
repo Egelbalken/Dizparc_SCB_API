@@ -15,11 +15,12 @@ namespace Persistence
         /// <param name="context"></param>
         /// <returns></returns>
         /// 
+        // JsonData object
+        public static List<Root> dataRoot = new List<Root>();
+        public static List<Variable> dataVariable = new List<Variable>();
+
         public static async Task SeedData(DataContext context)
         {
-            // JsonData object
-            Root dataRoot;
-            Variable dataVariable;
 
             using (var client = new HttpClient())
             {
@@ -32,37 +33,39 @@ namespace Persistence
 
                 //Console.WriteLine(json);
 
-                dataRoot = JsonConvert.DeserializeObject<Root>(json);
-                dataVariable = JsonConvert.DeserializeObject<Variable>(json);
+                dataRoot = JsonConvert.DeserializeObject<List<Root>>(json);
+                dataVariable = JsonConvert.DeserializeObject<List<Variable>>(json);
             }
 
 
-            if (context.roots.Any()) return;
+            //if (context.roots.Any()) return;
 
             /* About to add a loop.
-            foreach(var year in dataRoot)
-            {
-            }
             */
-
-            Variable variable = new Variable()
+            foreach (var item in dataVariable)
             {
-                code = dataVariable.code,
-                text = dataVariable.text,
-                values = new List<string>(dataVariable.values),
-                valueTexts = new List<string>(dataVariable.valueTexts),
-                elimination = dataVariable.elimination,
-                time = dataVariable.time,
-            };
-            await context.variables.AddRangeAsync(variable);
+                Variable variable = new Variable()
+                {
+                    code = item.code,
+                    text = item.text,
+                    values = new List<string>(item.values),
+                    valueTexts = new List<string>(item.valueTexts),
+                    elimination = item.elimination,
+                    time = item.time,
+                };
 
-            Root root = new Root()
-            {
-                title = dataRoot.title,
-                variables = new List<Variable>(dataRoot.variables),
-            };
+                foreach (var rootItem in dataRoot)
+                {
 
-            await context.roots.AddRangeAsync(root);
+                    Root root = new Root()
+                    {
+                        title = rootItem.title,
+                        variables = new List<Variable>(rootItem.variables),
+                    };
+                    await context.variables.AddRangeAsync(variable);
+                    await context.roots.AddRangeAsync(root);
+                }
+            }
 
             await context.SaveChangesAsync();
 

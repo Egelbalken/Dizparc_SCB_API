@@ -56,14 +56,7 @@ namespace API
                 app.UseDeveloperExceptionPage();
             }
 
-            // Not in use
-            //app.UseHttpsRedirection();
-
             app.UseRouting();
-
-            // Add Kestrel server startup for client-app
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
 
             app.UseCors("CorsPolicy");
 
@@ -72,7 +65,6 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }
