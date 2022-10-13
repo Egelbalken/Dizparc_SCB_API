@@ -33,11 +33,6 @@ namespace API
         {
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
-            });
-
 
             services.AddDbContext<DataContext>(options =>
             {
@@ -59,14 +54,16 @@ namespace API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
             }
 
             // Not in use
             //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            // Add Kestrel server startup for client-app
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             app.UseCors("CorsPolicy");
 
@@ -75,6 +72,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }

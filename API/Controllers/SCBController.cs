@@ -14,13 +14,13 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<SCB>>> GetSCB(){
-            return await _context.SCBs.ToListAsync();
+        public async Task<ActionResult<List<Root>>> GetRoot(){
+            return await _context.roots.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<SCB>> GetSCB(Guid id){
-            return await _context.SCBs.FindAsync(id);
+        public async Task<ActionResult<Root>> GetRoot(Guid id){
+            return await _context.roots.FindAsync(id);
         }
         
         
