@@ -14,16 +14,7 @@ namespace Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            /*
-            modelBuilder.Entity<Root>()
-                .HasKey(v => v.Id);
 
-            modelBuilder.Entity<Variable>()
-                .HasKey(r => r.Id);
-
-            modelBuilder.Entity<Root>()
-                .HasOne(v => v.variables);
-            */
         }
 
         public DbSet<Variable> variables {get;set;}

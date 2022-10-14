@@ -22,26 +22,25 @@ namespace Persistence
         public static async Task SeedData(DataContext context)
         {
 
+            /*
+                A using to add fetch the Json data and convert it to C# objects.
+            */
             using (var client = new HttpClient())
             {
-                /*
-                */
                 var endpoint = new Uri("http://api.scb.se/OV0104/v1/doris/en/ssd/BE/BE0101/BE0101A/BefolkningNy");
 
                 var result = await client.GetAsync(endpoint);
 
                 var json = await result.Content.ReadAsStringAsync();
 
-                // It will throw a exeption here,                 
+                // It will throw a exeption here, due to no DB and no successed josn pars.                 
                 dataRoot = JsonConvert.DeserializeObject<List<Root>>(json);
                 dataVariable = JsonConvert.DeserializeObject<List<Variable>>(json);
             }
 
-
+            // Do not have any dv migraion due to the Json parsing fail..
             //if (context.roots.Any()) return;
 
-            /* About to add a loop.
-            */
             foreach (var item in dataVariable)
             {
                 Variable variable = new Variable()
