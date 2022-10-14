@@ -33,12 +33,12 @@ namespace Persistence
 
                 var json = await result.Content.ReadAsStringAsync();
 
-                // It will throw a exeption here, due to no DB and no successed josn pars.                 
+                // It will throw a exeption here, due to no DB and no successed Json pars.                 
                 dataRoot = JsonConvert.DeserializeObject<List<Root>>(json);
                 dataVariable = JsonConvert.DeserializeObject<List<Variable>>(json);
             }
 
-            // Do not have any dv migraion due to the Json parsing fail..
+            // Do not have any db migration done due to the Json parsing fail..
             //if (context.roots.Any()) return;
 
             foreach (var item in dataVariable)
