@@ -24,7 +24,7 @@ namespace API
 
            try
            {
-                // Creates a migration to the database after every new starup.
+                // Creates a migration to the database after every new startup.
                 var context = services.GetRequiredService<DataContext>();
                 //await context.Database.MigrateAsync();
                 await Seed.SeedData(context);

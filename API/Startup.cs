@@ -34,10 +34,12 @@ namespace API
 
             services.AddControllers();
 
+            // Using SQLlite as DB
             services.AddDbContext<DataContext>(options =>
             {
                 options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
             });
+            // Sets the policy of the react app to allaw access at react apps localhost.
             services.AddCors( opt => 
             {
                 opt.AddPolicy("CorsPolicy", policy => {
@@ -58,6 +60,7 @@ namespace API
 
             app.UseRouting();
 
+            // Sets the policy of the react app to allaw access in the pipeline.
             app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
