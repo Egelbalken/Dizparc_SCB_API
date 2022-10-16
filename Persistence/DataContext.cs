@@ -14,7 +14,10 @@ namespace Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.Entity<Root>()
+            .HasNoKey();
+            modelBuilder.Entity<Variable>()
+            .HasNoKey();
         }
 
         public DbSet<Variable> variables {get;set;}

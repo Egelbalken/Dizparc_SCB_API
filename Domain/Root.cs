@@ -1,12 +1,11 @@
-using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Domain
 {
-    [Serializable]
     public class Root
     {
-        public Guid Id { get; set; }
-        public string title { get; set; }
-        public List<Variable> variables { get; set; }
+        [JsonPropertyName("Root")]
+        public string Title { get; set; } = String.Empty;
+        public List<Variable> Variables { get; set; } = new();
     }
 }

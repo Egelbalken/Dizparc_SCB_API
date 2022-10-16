@@ -1,17 +1,19 @@
-using System.ComponentModel.DataAnnotations;
+
+
+using System.Text.Json.Serialization;
 
 namespace Domain
 {
     [Serializable]
     public class Variable
     {
-        public Guid Id { get; set; }
-        public string code { get; set; }
-        public string text { get; set; }
-        public List<string> values { get; set; }
-        public List<string> valueTexts { get; set; }
-        public bool elimination { get; set; }
-        public bool time { get; set; }
+        [JsonPropertyName("Variables")]
+        public string Code { get; set; } = String.Empty;
+        public string Text { get; set; } = String.Empty;
+        public List<string> Values { get; set; } = new();
+        public List<string> ValueTexts { get; set; } = new();
+        public bool Elimination { get; set; }
+        public bool? Time { get; set; }
 
     }
 }
