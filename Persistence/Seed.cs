@@ -1,7 +1,5 @@
-using System.Runtime.Serialization.Json;
 using System.Text.Json;
 using Domain;
-using Newtonsoft.Json;
 
 namespace Persistence
 {
@@ -16,56 +14,57 @@ namespace Persistence
         /// <returns></returns>
         /// 
         // JsonData object
-        public static List<Root> dataRoot = new List<Root>();
-        public static List<Variable> dataVariable = new List<Variable>();
-
+        public Root varObj;
         public static async Task SeedData(DataContext context)
         {
 
             /*
                 A using to add fetch the Json data and convert it to C# objects.
             */
-            using (var client = new HttpClient())
+
+            var httpClient = new HttpClient();
+
+            var result = await httpClient.GetAsync("http://api.scb.se/OV0104/v1/doris/en/ssd/BE/BE0101/BE0101A/BefolkningNy");
+
+            string content = await result.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions
             {
-                var endpoint = new Uri("http://api.scb.se/OV0104/v1/doris/en/ssd/BE/BE0101/BE0101A/BefolkningNy");
+                PropertyNameCaseInsensitive = true
+            };
 
-                var result = await client.GetAsync(endpoint);
+            var rootObject = JsonSerializer.Deserialize<Root>(content, options);
 
-                var json = await result.Content.ReadAsStringAsync();
-
-                // It will throw a exeption here, due to no DB and no successed Json pars.                 
-                dataRoot = JsonConvert.DeserializeObject<List<Root>>(json);
-                dataVariable = JsonConvert.DeserializeObject<List<Variable>>(json);
-            }
-
-            // Do not have any db migration done due to the Json parsing fail..
-            //if (context.roots.Any()) return;
-
-            foreach (var item in dataVariable)
+            if (rootObject != null)
             {
-                Variable variable = new Variable()
+                foreach (var variable in rootObject.Variables)
                 {
-                    code = item.code,
-                    text = item.text,
-                    values = new List<string>(item.values),
-                    valueTexts = new List<string>(item.valueTexts),
-                    elimination = item.elimination,
-                    time = item.time,
-                };
+                    /*
 
-                foreach (var rootItem in dataRoot)
-                {
-
-                    Root root = new Root()
+                    var varObj = new Variable
                     {
-                        title = rootItem.title,
-                        variables = new List<Variable>(rootItem.variables),
+                        Code = variable.Code,
+                        Text = variable.Text,
+                        Values = variable.Values,
+                        ValueTexts = variable.ValueTexts,
+                        Elimination = variable.Elimination,
+                        Time = variable.Time
+                    };
+                    */
+
+                    var varRootObj = new Root
+                    {
+                        Title = rootObject.Title,
+                        Variables = rootObject.Variables
                     };
 
-                    await context.variables.AddRangeAsync(variable);
-                    await context.roots.AddRangeAsync(root);
+
                 }
+
+                await context.roots.AddRangeAsync(rootObject);
             }
+
+
 
             await context.SaveChangesAsync();
 
